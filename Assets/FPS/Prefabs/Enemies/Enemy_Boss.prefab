@@ -183,7 +183,7 @@ GameObject:
   - component: {fileID: 1345943282138014167}
   - component: {fileID: 3444686158330356048}
   m_Layer: 0
-  m_Name: Enemy_Turret
+  m_Name: Enemy_Boss
   m_TagString: Untagged
   m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
