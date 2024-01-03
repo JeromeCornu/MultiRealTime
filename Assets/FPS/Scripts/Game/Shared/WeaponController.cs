@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Unity.FPS.Game;
+
 
 namespace Unity.FPS.Game
 {
@@ -28,6 +30,11 @@ namespace Unity.FPS.Game
     [RequireComponent(typeof(AudioSource))]
     public class WeaponController : MonoBehaviour
     {
+
+        [Header("Raycast Parameters")]
+        [Tooltip("Enable raycast shooting")]
+        public bool UseRaycast = false;
+
         [Header("Information")] [Tooltip("The name that will be displayed in the UI for this weapon")]
         public string WeaponName;
 
@@ -69,6 +76,31 @@ namespace Unity.FPS.Game
 
         [Tooltip("Translation to apply to weapon arm when aiming with this weapon")]
         public Vector3 AimOffset;
+
+        [Header("Audio and visual (IF RAYCAST)")]
+        [Tooltip("VFX prefab to spawn upon impact")]
+        public GameObject ImpactVfx;
+
+        [Tooltip("LifeTime of the VFX before being destroyed")]
+        public float ImpactVfxLifetime = 5f;
+
+        [Tooltip("Offset along the hit normal where the VFX will be spawned")]
+        public float ImpactVfxSpawnOffset = 0.1f;
+
+        [Tooltip("Clip to play on impact")]
+        public AudioClip ImpactSfxClip;
+
+        [Header("Damage (IF RAYCAST)")]
+        [Tooltip("Damage of the projectile")]
+        public float Damage = 40f;
+
+        [Header("Collision Detection (IF RAYCAST)")]
+        [Tooltip("Layers this projectile can collide with")]
+        public LayerMask HittableLayers = -1;
+
+        const QueryTriggerInteraction k_TriggerInteraction = QueryTriggerInteraction.Collide;
+
+
 
         [Header("Ammo Parameters")]
         [Tooltip("Should the player manually reload")]
@@ -439,17 +471,24 @@ namespace Unity.FPS.Game
 
         void HandleShoot()
         {
-            int bulletsPerShotFinal = ShootType == WeaponShootType.Charge
+            if (UseRaycast)
+            {
+                HandleRaycastShoot();
+            }
+            else
+            {
+                int bulletsPerShotFinal = ShootType == WeaponShootType.Charge
                 ? Mathf.CeilToInt(CurrentCharge * BulletsPerShot)
                 : BulletsPerShot;
 
-            // spawn all bullets with random direction
-            for (int i = 0; i < bulletsPerShotFinal; i++)
-            {
-                Vector3 shotDirection = GetShotDirectionWithinSpread(WeaponMuzzle);
-                ProjectileBase newProjectile = Instantiate(ProjectilePrefab, WeaponMuzzle.position,
-                    Quaternion.LookRotation(shotDirection));
-                newProjectile.Shoot(this);
+                // spawn all bullets with random direction
+                for (int i = 0; i < bulletsPerShotFinal; i++)
+                {
+                    Vector3 shotDirection = GetShotDirectionWithinSpread(WeaponMuzzle);
+                    ProjectileBase newProjectile = Instantiate(ProjectilePrefab, WeaponMuzzle.position,
+                        Quaternion.LookRotation(shotDirection));
+                    newProjectile.Shoot(this);
+                }
             }
 
             // muzzle flash
@@ -497,6 +536,47 @@ namespace Unity.FPS.Game
                 spreadAngleRatio);
 
             return spreadWorldDirection;
+        }
+
+        void HandleRaycastShoot()
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(WeaponMuzzle.position, WeaponMuzzle.forward, out hit, Mathf.Infinity))
+            {
+                Debug.DrawLine(WeaponMuzzle.position, hit.point, Color.red, 5f);
+                RaycastInflictsDamage(hit);
+            }
+        }
+
+        void RaycastInflictsDamage(RaycastHit hit)
+        {
+            // collision details
+            Vector3 point = hit.point;
+            Vector3 normal = hit.normal;
+            Collider collider = hit.collider;
+
+            // Damage
+            Damageable damageable = collider.GetComponent<Damageable>();
+            if (damageable)
+            {
+                damageable.InflictDamage(Damage, false, Owner);
+            }
+
+            // visual and sonore effect
+            if (ImpactVfx)
+            {
+                GameObject impactVfxInstance = Instantiate(ImpactVfx, point + (normal * ImpactVfxSpawnOffset),
+                    Quaternion.LookRotation(normal));
+                if (ImpactVfxLifetime > 0)
+                {
+                    Destroy(impactVfxInstance.gameObject, ImpactVfxLifetime);
+                }
+            }
+
+            if (ImpactSfxClip)
+            {
+                AudioUtility.CreateSFX(ImpactSfxClip, point, AudioUtility.AudioGroups.Impact, 1f, 3f);
+            }
         }
     }
 }
