@@ -1,16 +1,17 @@
 {
     "name": "Unity.FPS.Tutorials",
+    "rootNamespace": "",
     "references": [
-        "GUID:149cad238efed4f53ac932b1e9555356",
-        "GUID:dca86c3434c38674a865b8fad7a81c91",
-        "GUID:8c4dd21966739024fbd72155091d199e"
+        "Unity.Play.Publisher.Editor",
+        "Unity.Tutorials.Core.Editor",
+        "NavMeshComponents"
     ],
     "includePlatforms": [],
     "excludePlatforms": [
         "Android",
-        "CloudRendering",
         "iOS",
         "LinuxStandalone64",
+        "CloudRendering",
         "Lumin",
         "macOSStandalone",
         "PS4",

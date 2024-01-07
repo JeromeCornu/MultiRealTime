@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Unity.FPS.Game;
+using Unity.FPS.Gameplay;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -318,8 +319,8 @@ namespace Unity.FPS.Gameplay
                 {
                     characterMovementFactor =
                         Mathf.Clamp01(playerCharacterVelocity.magnitude /
-                                      (m_PlayerCharacterController.MaxSpeedOnGround *
-                                       m_PlayerCharacterController.SprintSpeedModifier));
+                                        (m_PlayerCharacterController.MaxSpeedOnGround *
+                                        m_PlayerCharacterController.SprintSpeedModifier));
                 }
 
                 m_WeaponBobFactor =
@@ -330,7 +331,7 @@ namespace Unity.FPS.Gameplay
                 float frequency = BobFrequency;
                 float hBobValue = Mathf.Sin(Time.time * frequency) * bobAmount * m_WeaponBobFactor;
                 float vBobValue = ((Mathf.Sin(Time.time * frequency * 2f) * 0.5f) + 0.5f) * bobAmount *
-                                  m_WeaponBobFactor;
+                                    m_WeaponBobFactor;
 
                 // Apply weapon bob
                 m_WeaponBobLocalPosition.x = hBobValue;
