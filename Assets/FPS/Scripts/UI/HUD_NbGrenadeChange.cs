@@ -19,7 +19,7 @@ namespace Unity.FPS.UI
         {
             playerCharacterController = FindObjectOfType<PlayerCharacterController>();
 
-            if (playerCharacterController != null)
+            if (playerCharacterController == null)
             {
                 Debug.LogError("Didnt find any playerCharacterController in HUD_NbGrenadeChange");
             }
