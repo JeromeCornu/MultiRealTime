@@ -8,6 +8,7 @@ namespace Unity.FPS.AI
     {
         public enum AIState
         {
+            Patrol,
             Approach,
             Explode,
         }
@@ -22,8 +23,12 @@ namespace Unity.FPS.AI
 
         public Animator Animator;
 
-        [Header("Sound")] public AudioClip MovementSound;
+        [Header("Sound")]
+        public AudioClip MovementSound;
         public MinMaxFloat PitchDistortionMovementSpeed;
+
+        [Header("Visual")]
+        public GameObject explosionEffect;
 
         [Header("Parameters")]
         public float ExplosionRadius = 2f;
@@ -34,7 +39,6 @@ namespace Unity.FPS.AI
         AudioSource m_AudioSource;
 
         const string k_AnimMoveSpeedParameter = "MoveSpeed";
-        const string k_AnimExplodeParameter = "Explode";
 
         void Start()
         {
@@ -43,7 +47,7 @@ namespace Unity.FPS.AI
                 gameObject);
 
             // Start approaching
-            KamikazeAiState = AIState.Approach;
+            KamikazeAiState = AIState.Patrol;
 
             // Add an audio source
             m_AudioSource = GetComponent<AudioSource>();
@@ -78,13 +82,31 @@ namespace Unity.FPS.AI
             // Handle transitions 
             switch (KamikazeAiState)
             {
-                case AIState.Approach:
-                    // Transition to explode when close to the player
-                    if (Vector3.Distance(transform.position, m_EnemyController.KnownDetectedTarget.transform.position) <= ExplosionRadius)
+                case AIState.Patrol:
+                    // Add transition conditions for entering Approach state
+                    if (m_EnemyController != null && m_EnemyController.KnownDetectedTarget != null)
                     {
-                        Debug.Log("Transition to Explode");
-                        KamikazeAiState = AIState.Explode;
-                        m_EnemyController.SetNavDestination(transform.position); // Stop moving
+                        float distanceToTarget = Vector3.Distance(transform.position, m_EnemyController.KnownDetectedTarget.transform.position);
+
+                        if (distanceToTarget > ExplosionRadius)
+                        {
+                            // Debug.Log("Transition to Approach");
+                            KamikazeAiState = AIState.Approach;
+                            m_EnemyController.SetNavDestination(m_EnemyController.GetDestinationOnPath()); // You may need to adjust this
+                        }
+                    }
+                    break;
+
+                case AIState.Approach:
+                    if (m_EnemyController != null && m_EnemyController.KnownDetectedTarget != null)
+                    {
+                        // Transition to explode when close to the player
+                        if (Vector3.Distance(transform.position, m_EnemyController.KnownDetectedTarget.transform.position) <= ExplosionRadius)
+                        {
+                            // Debug.Log("Transition to Explode");
+                            KamikazeAiState = AIState.Explode;
+                            m_EnemyController.SetNavDestination(transform.position); // Stop moving
+                        }
                     }
                     break;
             }
@@ -95,6 +117,10 @@ namespace Unity.FPS.AI
             // Handle logic 
             switch (KamikazeAiState)
             {
+                case AIState.Patrol:
+                    m_EnemyController.UpdatePathDestination();
+                    m_EnemyController.SetNavDestination(m_EnemyController.GetDestinationOnPath());
+                    break;
                 case AIState.Approach:
                     m_EnemyController.SetNavDestination(m_EnemyController.KnownDetectedTarget.transform.position);
                     m_EnemyController.OrientTowards(m_EnemyController.KnownDetectedTarget.transform.position);
@@ -108,6 +134,8 @@ namespace Unity.FPS.AI
 
         void Explode()
         {
+            Instantiate(explosionEffect, transform.position, transform.rotation);
+
             // Damage and push nearby objects
             Collider[] colliders = Physics.OverlapSphere(transform.position, ExplosionRadius);
             foreach (Collider hitCollider in colliders)

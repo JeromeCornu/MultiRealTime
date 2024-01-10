@@ -354,6 +354,8 @@ MonoBehaviour:
   PitchDistortionMovementSpeed:
     Min: 0
     Max: 0
+  explosionEffect: {fileID: 5498417602638409523, guid: 91cc41c6b308f3d49b434278301e3012,
+    type: 3}
   ExplosionRadius: 2
   ExplosionDamage: 30
   ExplosionForce: 500

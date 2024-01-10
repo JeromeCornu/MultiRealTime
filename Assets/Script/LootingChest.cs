@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.FPS.Gameplay;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -24,12 +25,13 @@ public class LootingChest : MonoBehaviour
     private void Start()
     {
         rotationInitiale = transform.rotation;
+        rotationFinale = Quaternion.Euler(90f, 0f, 0f);
     }
 
     private void Update()
     {
 
-        if (Input.GetKeyDown(keyToInteract) && isNearOfChest && canDrop)
+        if (Input.GetKeyDown(keyToInteract) && isNearOfChest && canDrop && objectToDrop != null)
         {
             DropObject();
         }
@@ -41,27 +43,33 @@ public class LootingChest : MonoBehaviour
     {
         canDrop = false;
         StartCoroutine(LerpRotation());
-        Instantiate(objectToDrop, pointToDrop);
+        Instantiate(objectToDrop, pointToDrop.transform.position, pointToDrop.transform.rotation);
     }
 
 
     IEnumerator LerpRotation()
     {
         float elapsedTime = 0f;
-        float lerpSpeed = 1.0f;
+        float lerpPercentage = 0f;
+
         while (elapsedTime < 1f)
         {
-            animatePivot.rotation = Quaternion.Lerp(rotationInitiale, rotationFinale, lerpSpeed);
-            elapsedTime += Time.deltaTime * lerpSpeed;
+            animatePivot.rotation = Quaternion.Lerp(rotationInitiale, rotationFinale, lerpPercentage);
+
+            lerpPercentage = elapsedTime / 1f;
+
+            elapsedTime += Time.deltaTime;
             yield return null;
         }
 
-        
+        animatePivot.rotation = rotationFinale;
     }
+
 
     public void OnTriggerEnter(Collider other)
     {
-        isNearOfChest = true;
+         isNearOfChest = true;
+        print("entering");
     }
 
     public void OnTriggerExit(Collider other)

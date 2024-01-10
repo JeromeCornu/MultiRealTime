@@ -24,6 +24,9 @@ namespace Unity.FPS.Gameplay
         PlayerCharacterController m_PlayerCharacterController;
         bool m_FireInputWasHeld;
 
+        public GameObject grenadePrefab;
+        public float grenadeThrowForce = 20f;
+
         void Start()
         {
             m_PlayerCharacterController = GetComponent<PlayerCharacterController>();
@@ -34,11 +37,35 @@ namespace Unity.FPS.Gameplay
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+
         }
 
         void LateUpdate()
         {
             m_FireInputWasHeld = GetFireInputHeld();
+
+            if (m_PlayerCharacterController != null)
+            {
+                if (m_PlayerCharacterController.GetGrenadeInput())
+                {
+                    CreateGrenade();
+                }
+            }
+        }
+
+        void CreateGrenade()
+        {
+            if (grenadePrefab != null)
+            {
+                GameObject grenade = Instantiate(grenadePrefab, new Vector3(transform.position.x + 2, transform.position.y + 2, transform.position.z), transform.rotation);
+
+                Rigidbody grenadeRb = grenade.GetComponent<Rigidbody>();
+
+                Vector3 launchDirection = (transform.forward + transform.up).normalized;
+                grenadeRb.AddForce(launchDirection * grenadeThrowForce, ForceMode.Impulse);
+
+                grenade.transform.Rotate(Vector3.right * 45.0f);
+            }
         }
 
         public bool CanProcessInput()
