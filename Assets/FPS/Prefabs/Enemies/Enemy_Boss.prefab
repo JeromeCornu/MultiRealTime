@@ -280,7 +280,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e27364eefd6dd0341ba72a3bfc0d9727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 400
+  MaxHealth: 2000
   CriticalHealthRatio: 0.3
 --- !u!114 &3464315327790461765
 MonoBehaviour:
@@ -682,6 +682,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ad90ba0b1477764da373f5ec01a8cb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UseRaycast: 0
   WeaponName: mg
   WeaponIcon: {fileID: 0}
   CrosshairDataDefault:
@@ -703,6 +704,14 @@ MonoBehaviour:
   RecoilForce: 1
   AimZoomRatio: 1
   AimOffset: {x: 0, y: 0, z: 0}
+  ImpactVfx: {fileID: 0}
+  ImpactVfxLifetime: 5
+  ImpactVfxSpawnOffset: 0.1
+  ImpactSfxClip: {fileID: 0}
+  Damage: 40
+  HittableLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
   AutomaticReload: 1
   HasPhysicalBullets: 0
   ClipSize: 30
