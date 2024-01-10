@@ -953,11 +953,11 @@ MonoBehaviour:
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 1656810671}
-    PlayerPrefab: {fileID: 4582329871476905795, guid: 111aafe57b392e149a19b241dd8f4c71,
+    PlayerPrefab: {fileID: 2952682710200040310, guid: cee3e959fa8aae44891f12d607a8ba17,
       type: 3}
     NetworkPrefabs:
     - Override: 0
-      Prefab: {fileID: 4582329871476905795, guid: 111aafe57b392e149a19b241dd8f4c71,
+      Prefab: {fileID: 2952682710200040310, guid: cee3e959fa8aae44891f12d607a8ba17,
         type: 3}
       SourcePrefabToOverride: {fileID: 0}
       SourceHashToOverride: 0
