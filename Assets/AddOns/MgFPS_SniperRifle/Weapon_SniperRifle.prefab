@@ -141,7 +141,7 @@ MonoBehaviour:
   ImpactVfxLifetime: 5
   ImpactVfxSpawnOffset: 0.1
   ImpactSfxClip: {fileID: 0}
-  Damage: 40
+  Damage: 100
   HittableLayers:
     serializedVersion: 2
     m_Bits: 4294967295

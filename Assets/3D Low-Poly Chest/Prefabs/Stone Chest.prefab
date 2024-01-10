@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2578887862755002328}
   - component: {fileID: 8184250168057535261}
+  - component: {fileID: 6879836540821839074}
   m_Layer: 0
   m_Name: Stone Chest
   m_TagString: Untagged
@@ -31,7 +32,6 @@ Transform:
   m_Children:
   - {fileID: 708062447458636444}
   - {fileID: 6273898835922184290}
-  - {fileID: 5406724040983248690}
   - {fileID: 5302896370803645904}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -49,11 +49,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   keyToInteract: 101
-  objectToDrop: {fileID: 0}
+  objectToDrop: {fileID: 2620131183356007192, guid: d40ae884302b6684a8b3b6f3d55a71ba,
+    type: 3}
   pointToDrop: {fileID: 5302896370803645904}
   canDrop: 1
   animatePivot: {fileID: 6273898835922184290}
   isNearOfChest: 0
+--- !u!135 &6879836540821839074
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2918856425992379746}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4336616636848577149
 GameObject:
   m_ObjectHideFlags: 0
@@ -78,12 +92,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4336616636848577149}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.23, y: 0.063, z: -0.51}
+  m_LocalPosition: {x: 0, y: 0.33, z: -1.54}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2578887862755002328}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6422763027157245655
 GameObject:
@@ -96,8 +110,9 @@ GameObject:
   - component: {fileID: 708062447458636444}
   - component: {fileID: 8340928965105472913}
   - component: {fileID: 4658014297132087092}
+  - component: {fileID: 8888331409650922565}
   m_Layer: 0
-  m_Name: Stone Chest
+  m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -168,51 +183,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &7289050468031401966
-GameObject:
+--- !u!65 &8888331409650922565
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5406724040983248690}
-  - component: {fileID: 3040499410267502480}
-  m_Layer: 0
-  m_Name: Collider
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5406724040983248690
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7289050468031401966}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2578887862755002328}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &3040499410267502480
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7289050468031401966}
+  m_GameObject: {fileID: 6422763027157245655}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 2
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.97742087, y: 0.65441436, z: 0.92261565}
+  m_Center: {x: -0.000120818615, y: -0.23863861, z: -0.000113889575}
 --- !u!1 &8403573493517100729
 GameObject:
   m_ObjectHideFlags: 0
