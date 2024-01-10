@@ -82,6 +82,9 @@ MonoBehaviour:
   RotatingSpeed: 180
   PickupSfx: {fileID: 8300000, guid: 8dfdbc346713580429db9079ad1ff964, type: 3}
   PickupVfxPrefab: {fileID: 8380389342305634195}
+  SpawnInLoop: 0
+  spawnInterval: 10
+  rendererToHide: {fileID: 5649880935820430217}
 --- !u!114 &6275561476046798665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9920,6 +9923,12 @@ PrefabInstance:
       objectReference: {fileID: 4300000, guid: a89772d5378415745aa7b07b29bc8943, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 93b1ab0ae86bdf7459bbdf258c9dec49, type: 3}
+--- !u!23 &5649880935820430217 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2300000, guid: 93b1ab0ae86bdf7459bbdf258c9dec49,
+    type: 3}
+  m_PrefabInstance: {fileID: 5649880935822726121}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5649880935822330217 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 93b1ab0ae86bdf7459bbdf258c9dec49,

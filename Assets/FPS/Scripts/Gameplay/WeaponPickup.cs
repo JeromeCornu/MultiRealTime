@@ -5,6 +5,9 @@ namespace Unity.FPS.Gameplay
 {
     public class WeaponPickup : Pickup
     {
+        [SerializeField]
+        private bool SpawnInLoop;
+
         [Tooltip("The prefab for the weapon that will be added to the player on pickup")]
         public WeaponController WeaponPrefab;
 
@@ -31,10 +34,15 @@ namespace Unity.FPS.Gameplay
                     if (playerWeaponsManager.GetActiveWeapon() == null)
                     {
                         playerWeaponsManager.SwitchWeapon(true);
+                        m_HasPlayedFeedback = false;
                     }
 
                     PlayPickupFeedback();
-                    Destroy(gameObject);
+
+                    if (!SpawnInLoop)
+                    {
+                        Destroy(gameObject);
+                    }
                 }
             }
         }

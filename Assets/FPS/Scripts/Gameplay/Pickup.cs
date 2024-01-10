@@ -21,7 +21,7 @@ namespace Unity.FPS.Gameplay
 
         Collider m_Collider;
         Vector3 m_StartPosition;
-        bool m_HasPlayedFeedback;
+        public bool m_HasPlayedFeedback;
 
         protected virtual void Start()
         {
