@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using Unity.FPS.Game;
 using UnityEngine;
 
-public class FragGrenade : MonoBehaviour
+public class ExplosionGrenade : MonoBehaviour
 {
-    public float timeBeforeExplosion = 02f;
+    public float timeBeforeExplosion = 0.5f;
     public GameObject explosionEffect;
-    public GameObject fragmentPrefab;
-    public int numberOfFragments = 5;
-    public float fragmentSpawnRadius = 2f;
-    public float damage = 20f;
+    public float damage = 50f;
     public float explosionRadius = 5f;
 
     void Start()
@@ -21,16 +18,6 @@ public class FragGrenade : MonoBehaviour
     void ExplodeGrenade()
     {
         Instantiate(explosionEffect, transform.position, transform.rotation);
-
-        // Spawn fragments
-        for (int i = 0; i < numberOfFragments; i++)
-        {
-            Vector3 randomDirection = Random.onUnitSphere * fragmentSpawnRadius;
-            randomDirection.y = 0f; // Keep the fragments on the same level as the grenade
-            Vector3 fragmentPosition = transform.position + randomDirection;
-            Quaternion fragmentRotation = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
-            Instantiate(fragmentPrefab, fragmentPosition, fragmentRotation);
-        }
 
         ApplyDamage();
         gameObject.SetActive(false);

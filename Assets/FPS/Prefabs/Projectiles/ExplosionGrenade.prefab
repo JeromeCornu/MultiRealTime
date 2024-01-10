@@ -40,7 +40,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 579920747912942012}
-  m_Mesh: {fileID: 4300000, guid: a89772d5378415745aa7b07b29bc8943, type: 3}
+  m_Mesh: {fileID: 4300000, guid: ea68aa111adc3264f9968657e12cc86a, type: 3}
 --- !u!23 &3785563650773017319
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -94,9 +94,9 @@ GameObject:
   - component: {fileID: 8576033051999739307}
   - component: {fileID: -7348011382119183684}
   - component: {fileID: 8146455303661075048}
-  - component: {fileID: 1090108356800798304}
+  - component: {fileID: 8680575130244193248}
   m_Layer: 0
-  m_Name: FragGrenade
+  m_Name: ExplosionGrenade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -147,7 +147,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1090108356800798304
+--- !u!114 &8680575130244193248
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -156,15 +156,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1499898827640000160}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1163c03d0ea982641ab8e21e83db1805, type: 3}
+  m_Script: {fileID: 11500000, guid: c1e1b21f6df20bf4e89fe738302591dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeBeforeExplosion: 1
-  explosionEffect: {fileID: 5498417602638409523, guid: 91cc41c6b308f3d49b434278301e3012,
-    type: 3}
-  fragmentPrefab: {fileID: 1499898827640000160, guid: c7fb0be883d7099469889810f6791540,
-    type: 3}
-  numberOfFragments: 5
-  fragmentSpawnRadius: 3
+  timeBeforeExplosion: 2
+  explosionEffect: {fileID: 191186, guid: 079954accd64b32419ec069129c81273, type: 3}
   damage: 20
   explosionRadius: 5
