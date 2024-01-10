@@ -264,6 +264,11 @@ namespace Unity.FPS.Gameplay
             }
         }
 
+        public bool GetGrenadeInput()
+        {
+            return Input.GetKeyDown(KeyCode.G);
+        }
+
         void HandleCharacterMovement()
         {
             // horizontal character rotation

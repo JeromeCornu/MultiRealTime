@@ -414,6 +414,9 @@ MonoBehaviour:
   TriggerAxisThreshold: 0.4
   InvertYAxis: 0
   InvertXAxis: 0
+  grenadePrefab: {fileID: 1499898827640000160, guid: 6e8ff5051f775d74faa5e7ccfee117d8,
+    type: 3}
+  grenadeThrowForce: 20
 --- !u!114 &814417836257332542
 MonoBehaviour:
   m_ObjectHideFlags: 0
