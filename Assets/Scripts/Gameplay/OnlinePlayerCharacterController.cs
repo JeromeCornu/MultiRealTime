@@ -238,6 +238,7 @@ public class OnlinePlayerCharacterController : NetworkBehaviour
         //}
 
         //UpdateCharacterHeight(false);
+        if(!IsOwner) { return; }
 
         if(IsClient)
         {
@@ -526,6 +527,7 @@ public class OnlinePlayerCharacterController : NetworkBehaviour
         _isSprinting.Value = isSprinting;
         _moveInput.Value = moveInput;
         _jumpInputDown.Value = jumpInputDown;
+        HandleCharacterMovementServer();
     }                                 
 }                                     
 
