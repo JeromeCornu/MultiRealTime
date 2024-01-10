@@ -12,12 +12,19 @@ public class Door : MonoBehaviour
 
     private bool isDoorAlreadyOpened;
 
-    private Vector3 positionFinale = new Vector3(0.0f, 8.0f, 0.0f);
+    private Vector3 positionInitiale;
+    private Vector3 positionFinale;
 
+    private void Start()
+    {
+        positionInitiale = transform.position;
+        positionFinale = transform.position;
+        positionFinale.y += 8.0f;
+    }
 
     private void Update()
     {
-        if (CheckAllEnemyDied() && isDoorAlreadyOpened)
+        if (CheckAllEnemyDied() && !isDoorAlreadyOpened)
         {
             StartCoroutine(OpenDoor());
         }
@@ -33,20 +40,22 @@ public class Door : MonoBehaviour
             return false;
         }
         return true;
+
     }
 
     IEnumerator OpenDoor()
     {
-        Debug.Log("caca");
         float elapsedTime = 0f;
-        float lerpSpeed = 1.0f;
-        while (elapsedTime < 1f)
+        float lerpDuration = 5.0f;
+        while (elapsedTime < lerpDuration)
         {
-            transform.position = Vector3.Lerp(transform.position, positionFinale, lerpSpeed);
-            elapsedTime += Time.deltaTime * lerpSpeed;
+            float t = elapsedTime / lerpDuration;
+            transform.position = Vector3.Lerp(positionInitiale, positionFinale, t);
+            elapsedTime += Time.deltaTime;
             yield return null;
         }
-        isDoorAlreadyOpened = false;
+        transform.position = positionFinale;
+        isDoorAlreadyOpened = true;
         Destroy(gameObject);
     }
 

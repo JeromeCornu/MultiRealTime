@@ -46,7 +46,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ennemyInZone: []
-  doorToOpen: {fileID: 0}
 --- !u!1 &4173670274152304471
 GameObject:
   m_ObjectHideFlags: 0
