@@ -96,6 +96,12 @@ namespace Unity.FPS.Gameplay
         [Tooltip("Damage recieved when falling at the maximum speed")]
         public float FallDamageAtMaxSpeed = 50f;
 
+        [Tooltip("Grenades")]
+        public GameObject grenadePrefab;
+        public float grenadeThrowForce = 20f;
+        public int maxGrenades = 5;
+        private int currentGrenades = 3;
+
         public UnityAction<bool> OnStanceChanged;
 
         public Vector3 CharacterVelocity { get; set; }
@@ -136,6 +142,7 @@ namespace Unity.FPS.Gameplay
         void Awake()
         {
             ActorsManager actorsManager = FindObjectOfType<ActorsManager>();
+            
             if (actorsManager != null)
                 actorsManager.SetPlayer(gameObject);
         }
@@ -262,6 +269,43 @@ namespace Unity.FPS.Gameplay
                     }
                 }
             }
+        }
+        public void ThrowGrenade()
+        {
+            if (grenadePrefab != null && currentGrenades > 0)
+            {
+                GameObject grenade = Instantiate(grenadePrefab, new Vector3(transform.position.x + 2, transform.position.y + 2, transform.position.z), transform.rotation);
+
+                Rigidbody grenadeRb = grenade.GetComponent<Rigidbody>();
+
+                Vector3 launchDirection = (transform.forward + transform.up).normalized;
+                grenadeRb.AddForce(launchDirection * grenadeThrowForce, ForceMode.Impulse);
+
+                grenade.transform.Rotate(Vector3.right * 45.0f);
+
+                RemoveGrenade(); ;
+            }
+        }
+
+        public void AddOneGrenade()
+        {
+            if (currentGrenades < maxGrenades)
+            {
+                currentGrenades += 1;
+            }
+        }
+
+        public void RemoveGrenade()
+        {
+            if (currentGrenades > 0)
+            {
+                currentGrenades -= 1;
+            }
+        }
+
+        public int GetCurrentGrenades()
+        {
+            return currentGrenades;
         }
 
         public bool GetGrenadeInput()
@@ -478,5 +522,6 @@ namespace Unity.FPS.Gameplay
             IsCrouching = crouched;
             return true;
         }
+
     }
 }
