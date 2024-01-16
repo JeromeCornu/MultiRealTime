@@ -4,6 +4,75 @@ using System.Threading;
 using Unity.Netcode;
 using UnityEngine;
 
+public abstract class Timer
+{
+    protected float initialTime;
+    protected float Time { get; set; }
+    public bool IsRunning { get; protected set; }
+
+    public float Progress => Time / initialTime;
+
+    //public Action OnTimerStart = delegate { };
+    //public Action OnTimerStop = delegate { };
+
+    protected Timer(float value)
+    {
+        initialTime = value;
+        IsRunning = false;
+    }
+
+    public void Start()
+    {
+        Time = initialTime;
+        if (!IsRunning)
+        {
+            IsRunning = true;
+            //OnTimerStart.Invoke();
+        }
+    }
+
+    public void Stop()
+    {
+        if (IsRunning)
+        {
+            IsRunning = false;
+            //OnTimerStop.Invoke();
+        }
+    }
+
+    public void Resume() => IsRunning = true;
+    public void Pause() => IsRunning = false;
+
+    public abstract void Tick(float deltaTime);
+}
+public class CountdownTimer : Timer
+{
+    public CountdownTimer(float value) : base(value) { }
+
+    public override void Tick(float deltaTime)
+    {
+        if (IsRunning && Time > 0)
+        {
+            Time -= deltaTime;
+        }
+
+        if (IsRunning && Time <= 0)
+        {
+            Stop();
+        }
+    }
+
+    public bool IsFinished => Time <= 0;
+
+    public void Reset() => Time = initialTime;
+
+    public void Reset(float newTime)
+    {
+        initialTime = newTime;
+        Reset();
+    }
+}
+
 public class OnlinePlayer : NetworkBehaviour
 {
     [SerializeField] private Camera _camera;
@@ -54,12 +123,17 @@ public class OnlinePlayer : NetworkBehaviour
     CircularBuffer<InputPayload> _clientInputBuffer;
     StatePayload _lastServerState;
     StatePayload lastProcessedState;
+    
 
     CircularBuffer<StatePayload> _serverStateBuffer;
     Queue<InputPayload> _serverInputQueue;
 
-
+    [SerializeField] float reconcialitionCountdown =10f;
     [SerializeField] float _reconciliationThreshold = 10f;
+
+    CountdownTimer reconciliationCooldown;
+
+
     #endregion
 
 
@@ -102,7 +176,6 @@ public class OnlinePlayer : NetworkBehaviour
         move.x = horizontalInput;
         move.z = verticalInput;
 
-        Debug.Log(move);
 
         float mouseX = Input.GetAxis("Mouse X") * _mouseSensitivity;
         float mouseY = Input.GetAxis("Mouse Y") * _mouseSensitivity;
@@ -248,7 +321,8 @@ public class OnlinePlayer : NetworkBehaviour
     void RotateView(float verticalRotation, float horizontalRotation)
     {
         _camera.transform.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
-        transform.rotation = Quaternion.Lerp(transform.rotation, transform.rotation * Quaternion.Euler(0f, horizontalRotation, 0f), _timer.MinTimeBetweenTicks);
+        transform.rotation *= Quaternion.Euler(0f, horizontalRotation, 0f);
+        //transform.rotation = Quaternion.Lerp(transform.rotation, transform.rotation + Quaternion.Euler(0f, horizontalRotation, 0f), _timer.MinTimeBetweenTicks);
     }
 
     void Move(Vector3 inputVector)
