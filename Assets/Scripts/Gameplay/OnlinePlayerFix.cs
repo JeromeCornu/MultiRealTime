@@ -5,16 +5,28 @@ using System.Linq.Expressions;
 using Unity.Netcode;
 using UnityEngine;
 
-public struct InputPayload
+public struct InputPayload : INetworkSerializable
 {
     public int tick;
     public Vector3 inputVector;
+
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+    {
+        serializer.SerializeValue(ref tick);
+        serializer.SerializeValue(ref inputVector);
+    }
 }
 
-public struct StatePayload
+public struct StatePayload : INetworkSerializable
 {
     public int tick;
     public Vector3 position;
+
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+    {
+        serializer.SerializeValue(ref tick);
+        serializer.SerializeValue(ref position);
+    }
 }
 
 public class OnlinePlayerFix : NetworkBehaviour
@@ -63,6 +75,7 @@ public class OnlinePlayerFix : NetworkBehaviour
         {
             HandleTick();
         }
+
         if (!IsOwner) { return; }
 
         move = Vector3.zero;
@@ -78,7 +91,7 @@ public class OnlinePlayerFix : NetworkBehaviour
         int serverStateBufferIndex = latestServerState.tick % BUFFER_SIZE;
         float positionError = Vector3.Distance(latestServerState.position, stateBuffer[serverStateBufferIndex].position);
 
-        if(positionError < 0.1f)
+        if(positionError > 0.1f)
         {
             Debug.Log("we have to reconcile");
 
@@ -102,9 +115,15 @@ public class OnlinePlayerFix : NetworkBehaviour
 
     }
 
+
     public void HandleClientTick()
     {
         if (!IsClient || !IsOwner) return;
+
+        if (!latestServerState.Equals(default(StatePayload)) && lastProcessedState.Equals(default(StatePayload)) || !latestServerState.Equals(lastProcessedState))
+        {
+            HandleServerReconciliation();
+        }
 
         int bufferIndex = _timer.CurrentTick % BUFFER_SIZE;
 
@@ -126,13 +145,6 @@ public class OnlinePlayerFix : NetworkBehaviour
         HandleClientTick();
         if(IsServer)
         {
-
-            if (!latestServerState.Equals(default(StatePayload)) && lastProcessedState.Equals(default(StatePayload)) || !latestServerState.Equals(lastProcessedState))
-            {
-                HandleServerReconciliation();
-            }
-
-
             int bufferIndex = -1;
             while (inputQueue.Count > 0) 
             {
@@ -151,26 +163,29 @@ public class OnlinePlayerFix : NetworkBehaviour
         }
     }
 
-    public void OnServerMovementState(StatePayload serverState)
+    [ClientRpc]
+    public void OnServerMovementStateClientRpc(StatePayload serverState)
     {
         latestServerState = serverState;
     }
 
+
     IEnumerator SendToServer(InputPayload inputPayload)
     {
         yield return new WaitForSeconds(0.02f);
-        OnClientInput(inputPayload);
+        OnClientInputServerRpc(inputPayload);
         
     }
+
 
     IEnumerator SendToClient(StatePayload statePayload)
     {
         yield return new WaitForSeconds(0.02f);
-
-        OnServerMovementState(statePayload);
+        OnServerMovementStateClientRpc(statePayload);
     }
 
-    public void OnClientInput(InputPayload inputPayload) 
+    [ServerRpc]
+    public void OnClientInputServerRpc(InputPayload inputPayload) 
     {
         inputQueue.Enqueue(inputPayload);
     }
