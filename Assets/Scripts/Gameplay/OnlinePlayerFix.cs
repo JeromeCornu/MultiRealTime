@@ -68,13 +68,17 @@ public class OnlinePlayerFix : NetworkBehaviour
         inputBuffer = new InputPayload[BUFFER_SIZE];
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         _timer.Update(Time.deltaTime);
         if (_timer.ShouldTick())
         {
             HandleTick();
         }
+    }
+
+    private void Update()
+    {
 
         if (!IsOwner) { return; }
 
