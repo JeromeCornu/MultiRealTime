@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
+
 namespace Unity.FPS.Gameplay
 {
     [RequireComponent(typeof(CharacterController), typeof(PlayerInputHandler), typeof(AudioSource))]
@@ -271,6 +272,7 @@ namespace Unity.FPS.Gameplay
 
         void HandleCharacterMovement()
         {
+            //if()
             // horizontal character rotation
             {
                 // rotate the transform with the input speed around its local Y axis
